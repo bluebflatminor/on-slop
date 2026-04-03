@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>On Slop — A Field Guide · V4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1714;
+    --paper: #f5f0e8;
+    --paper-dark: #ede7d8;
+    --accent: #8b2e00;
+    --accent-light: #c4541a;
+    --rule: #c8bfaa;
+    --muted: #6b6257;
+    --highlight: #f0e4c8;
+    --case-bg: #1a1714;
+    --case-accent: #d4783a;
+  }
+
+- { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+background: var(–paper);
+color: var(–ink);
+font-family: ‘Source Serif 4’, Georgia, serif;
+font-weight: 300;
+font-size: 18px;
+line-height: 1.75;
+}
+
+.masthead {
+border-bottom: 3px double var(–ink);
+padding: 2rem 0 1.5rem;
+text-align: center;
+background: var(–paper);
+}
+
+.masthead::before {
+content: ‘’;
+display: block;
+height: 4px;
+background: var(–accent);
+margin-bottom: 1.5rem;
+}
+
+.publication-line {
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 0.68rem;
+letter-spacing: 0.18em;
+color: var(–muted);
+text-transform: uppercase;
+margin-bottom: 1.2rem;
+}
+
+.version-tag {
+display: inline-block;
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 0.6rem;
+letter-spacing: 0.15em;
+color: var(–paper);
+background: var(–accent);
+padding: 0.2rem 0.5rem;
+margin-left: 0.5rem;
+vertical-align: middle;
+position: relative;
+top: -2px;
+}
+
+.main-title {
+font-family: ‘Playfair Display’, serif;
+font-size: clamp(3rem, 8vw, 5.5rem);
+font-weight: 700;
+line-height: 1;
+letter-spacing: -0.02em;
+color: var(–ink);
+margin-bottom: 0.3rem;
+}
+
+.main-title em { font-style: italic; color: var(–accent); }
+
+.subtitle {
+font-family: ‘Playfair Display’, serif;
+font-style: italic;
+font-size: clamp(1rem, 2.5vw, 1.3rem);
+color: var(–muted);
+margin-bottom: 1.5rem;
+font-weight: 400;
+}
+
+.byline-block {
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 0.68rem;
+color: var(–muted);
+letter-spacing: 0.08em;
+display: flex;
+justify-content: center;
+gap: 2rem;
+flex-wrap: wrap;
+}
+
+.byline-block span::before { content: ’— ’; color: var(–accent); }
+
+.container { max-width: 780px; margin: 0 auto; padding: 0 2rem; }
+
+/* TOC */
+.toc { background: var(–paper-dark); border: 1px solid var(–rule); padding: 1.5rem 2rem; margin: 2.5rem 0; }
+
+.toc-title {
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 0.65rem;
+letter-spacing: 0.2em;
+color: var(–accent);
+text-transform: uppercase;
+margin-bottom: 0.8rem;
+}
+
+.toc ol { list-style: none; columns: 2; column-gap: 2rem; }
+
+.toc li { font-size: 0.88rem; padding: 0.2rem 0; color: var(–muted); display: flex; gap: 0.5rem; break-inside: avoid; }
+
+.toc li .toc-num { font-family: ‘JetBrains Mono’, monospace; font-size: 0.65rem; color: var(–accent); min-width: 1.4rem; margin-top: 0.2rem; }
+
+/* Lede */
+.lede { background: var(–ink); color: var(–paper); padding: 3rem 2.5rem; margin: 3rem 0; }
+
+.lede p {
+font-family: ‘Playfair Display’, serif;
+font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+font-style: italic;
+line-height: 1.6;
+}
+
+.lede p::before { content: ‘\201C’; font-size: 1.2em; color: var(–accent); margin-right: 0.05em; font-style: normal; }
+.lede p::after  { content: ‘\201D’; font-size: 1.2em; color: var(–accent); margin-left:  0.05em; font-style: normal; }
+
+/* Sections */
+.section { padding: 2.5rem 0; border-bottom: 1px solid var(–rule); }
+.section:last-of-type { border-bottom: none; }
+
+.section-label {
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 0.65rem;
+letter-spacing: 0.25em;
+color: var(–accent);
+text-transform: uppercase;
+margin-bottom: 0.6rem;
+display: flex;
+align-items: center;
+gap: 0.8rem;
+}
+
+.section-label::after { content: ‘’; flex: 1; height: 1px; background: var(–rule); }
+
+.field-note {
+font-family: ‘Playfair Display’, serif;
+font-style: italic;
+font-size: 0.95rem;
+color: var(–accent-light);
+border-left: 2px solid var(–accent-light);
+padding-left: 1rem;
+margin-bottom: 1.4rem;
+}
+
+h2 { font-family: ‘Playfair Display’, serif; font-size: clamp(1.5rem, 3.5vw, 2.1rem); font-weight: 700; line-height: 1.2; margin-bottom: 0.4rem; color: var(–ink); }
+
+h3 { font-family: ‘Playfair Display’, serif; font-size: 1.2rem; font-style: italic; font-weight: 400; color: var(–accent); margin: 2rem 0 0.6rem; }
+
+p { margin-bottom: 1.2rem; }
+p:last-child { margin-bottom: 0; }
+
+strong { font-weight: 400; color: var(–ink); border-bottom: 1px solid var(–accent-light); }
+em { font-style: italic; }
+
+/* Definition block */
+.definition-block { background: var(–highlight); border-left: 4px solid var(–accent); padding: 1.5rem 1.8rem; margin: 2rem 0; }
+
+.definition-block .def-label {
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 0.65rem;
+letter-spacing: 0.2em;
+color: var(–accent);
+text-transform: uppercase;
+margin-bottom: 0.5rem;
+}
+
+.definition-block p { font-size: 1.05rem; line-height: 1.65; margin: 0; }
+
+/* Decision rule */
+.decision-rule {
+background: var(–ink);
+color: var(–paper);
+padding: 1.6rem 2rem;
+margin: 2rem 0;
+}
+
+.decision-rule .dr-label {
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 0.62rem;
+letter-spacing: 0.2em;
+text-transform: uppercase;
+color: var(–case-accent);
+margin-bottom: 1rem;
+}
+
+.decision-rule .dr-row {
+display: grid;
+grid-template-columns: auto 1fr;
+gap: 0.6rem 1.2rem;
+align-items: start;
+margin-bottom: 0.7rem;
+font-size: 0.95rem;
+line-height: 1.6;
+}
+
+.decision-rule .dr-row:last-child { margin-bottom: 0; }
+
+.dr-if {
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 0.65rem;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+color: var(–case-accent);
+padding-top: 0.2rem;
+white-space: nowrap;
+}
+
+.dr-then { color: #c8bfaa; }
+
+/* Revision note */
+.revision-note {
+background: var(–paper-dark);
+border: 1px solid var(–rule);
+border-left: 3px solid var(–muted);
+padding: 0.9rem 1.2rem;
+margin: 1.5rem 0;
+font-size: 0.88rem;
+color: var(–muted);
+line-height: 1.6;
+}
+
+.revision-note .rn-label {
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 0.6rem;
+letter-spacing: 0.18em;
+text-transform: uppercase;
+color: var(–muted);
+margin-bottom: 0.3rem;
+}
+
+/* Concept pair */
+.concept-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0; }
+
+.concept-card { padding: 1.2rem 1.4rem; border: 1px solid var(–rule); }
+.concept-card.primary { background: var(–highlight); border-color: var(–accent-light); }
+.concept-card.secondary { background: var(–paper-dark); }
+
+.concept-card .card-label {
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 0.62rem;
+letter-spacing: 0.18em;
+text-transform: uppercase;
+color: var(–accent);
+margin-bottom: 0.5rem;
+}
+
+.concept-card p { font-size: 0.93rem; line-height: 1.6; color: var(–muted); margin: 0; }
+
+/* Taxonomy */
+.taxonomy { width: 100%; border-collapse: collapse; margin: 2rem 0; font-size: 0.92rem; }
+.taxonomy thead tr { background: var(–ink); color: var(–paper); }
+
+.taxonomy thead th {
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 0.62rem;
+letter-spacing: 0.12em;
+text-transform: uppercase;
+padding: 0.8rem 1rem;
+text-align: left;
+font-weight: 500;
+}
+
+.taxonomy tbody tr { border-bottom: 1px solid var(–rule); }
+.taxonomy tbody tr:nth-child(even) { background: var(–paper-dark); }
+.taxonomy tbody tr.slop-row { background: var(–highlight); }
+.taxonomy tbody tr.new-row { background: #f0ebe0; }
+.taxonomy tbody td { padding: 0.8rem 1rem; vertical-align: top; line-height: 1.5; }
+
+.taxonomy tbody td:first-child { font-family: ‘Playfair Display’, serif; font-style: italic; font-size: 1rem; }
+.taxonomy tbody tr.slop-row td:first-child { color: var(–accent); font-weight: 700; font-style: normal; }
+.taxonomy tbody tr.new-row td:first-child { color: var(–muted); font-style: normal; font-weight: 700; }
+
+/* Zones */
+.zone-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; margin: 2rem 0; }
+
+.zone { border: 1px solid var(–rule); padding: 1.4rem 1.6rem; position: relative; overflow: hidden; }
+.zone > *:not(.zone-number) { position: relative; z-index: 1; }
+
+.zone-number {
+font-family: ‘Playfair Display’, serif;
+font-size: 3rem;
+font-weight: 700;
+color: var(–rule);
+position: absolute;
+top: 0.5rem;
+right: 1rem;
+line-height: 1;
+z-index: 0;
+pointer-events: none;
+user-select: none;
+}
+
+.zone-title { font-family: ‘JetBrains Mono’, monospace; font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(–accent); margin-bottom: 0.4rem; position: relative; z-index: 1; }
+
+.zone h4 { font-family: ‘Playfair Display’, serif; font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem; position: relative; z-index: 1; }
+
+.zone p { font-size: 0.95rem; color: var(–muted); margin: 0 0 0.6rem; line-height: 1.6; position: relative; z-index: 1; }
+.zone p:last-child { margin-bottom: 0; }
+
+.zone-1 { border-left: 4px solid #8b2e00; }
+.zone-2 { border-left: 4px solid #c4541a; }
+.zone-3 { border-left: 4px solid #6b6257; }
+
+/* Phase transition note inside zone */
+.phase-note {
+background: var(–paper-dark);
+border-top: 1px solid var(–rule);
+margin-top: 0.8rem;
+padding-top: 0.8rem;
+font-size: 0.85rem !important;
+color: var(–muted) !important;
+font-style: italic;
+}
+
+/* Fourth category */
+.fourth-category { background: var(–ink); color: var(–paper); padding: 2rem 2.2rem; margin: 2rem 0; border-left: 4px solid var(–case-accent); }
+
+.fourth-category .fc-label { font-family: ‘JetBrains Mono’, monospace; font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(–case-accent); margin-bottom: 0.6rem; }
+
+.fourth-category h4 { font-family: ‘Playfair Display’, serif; font-size: 1.2rem; font-weight: 700; color: var(–paper); margin-bottom: 0.8rem; }
+
+.fourth-category p { font-size: 0.95rem; color: #c8bfaa; line-height: 1.7; margin-bottom: 0.8rem; }
+.fourth-category p:last-child { margin-bottom: 0; }
+.fourth-category strong { color: var(–paper); border-bottom-color: var(–case-accent); }
+
+/* Case study */
+.case-study { background: var(–case-bg); color: var(–paper); padding: 2.5rem; margin: 2.5rem 0; }
+
+.case-study::before { content: ‘CASE STUDY’; font-family: ‘JetBrains Mono’, monospace; font-size: 0.6rem; letter-spacing: 0.25em; color: var(–case-accent); display: block; margin-bottom: 1rem; }
+
+.case-study h3 { font-family: ‘Playfair Display’, serif; font-size: 1.4rem; font-weight: 700; font-style: normal; color: var(–paper); margin: 0 0 0.3rem; }
+
+.case-study .case-date { font-family: ‘JetBrains Mono’, monospace; font-size: 0.65rem; letter-spacing: 0.1em; color: var(–case-accent); margin-bottom: 1.2rem; display: block; }
+
+.case-study p { color: #c8bfaa; font-size: 0.97rem; line-height: 1.7; margin-bottom: 1rem; }
+.case-study p:last-child { margin-bottom: 0; }
+.case-study strong { color: var(–paper); border-bottom-color: var(–case-accent); font-weight: 400; }
+
+.case-hedging { border-top: 1px solid #3a3530; margin-top: 1.2rem; padding-top: 1rem; font-style: italic; font-size: 0.88rem !important; color: #8a7f76 !important; }
+
+.case-detail { border-top: 1px solid #3a3530; margin-top: 1.4rem; padding-top: 1.4rem; }
+
+.case-detail-label { font-family: ‘JetBrains Mono’, monospace; font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(–case-accent); margin-bottom: 0.5rem; }
+
+.case-analysis { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
+
+.analysis-item { background: rgba(255,255,255,0.04); border: 1px solid #3a3530; border-left: 3px solid var(–case-accent); padding: 0.9rem 1rem; }
+
+.analysis-item .ai-label { font-family: ‘JetBrains Mono’, monospace; font-size: 0.58rem; letter-spacing: 0.15em; color: var(–case-accent); text-transform: uppercase; margin-bottom: 0.3rem; }
+
+.analysis-item p { font-size: 0.85rem; margin: 0; color: #a09890; }
+
+/* Checklist */
+.checklist { list-style: none; margin: 1.5rem 0; }
+
+.checklist li { display: flex; gap: 1rem; align-items: flex-start; padding: 0.9rem 0; border-bottom: 1px solid var(–rule); font-size: 0.97rem; line-height: 1.6; }
+.checklist li:last-child { border-bottom: none; }
+
+.check-num { font-family: ‘JetBrains Mono’, monospace; font-size: 0.7rem; color: var(–accent); background: var(–highlight); border: 1px solid var(–accent-light); min-width: 2rem; height: 2rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 0.1rem; }
+
+.check-content strong { display: block; font-family: ‘Playfair Display’, serif; font-style: italic; font-weight: 400; font-size: 1rem; color: var(–ink); border-bottom: none; margin-bottom: 0.2rem; }
+
+.check-note { display: inline-block; font-family: ‘JetBrains Mono’, monospace; font-size: 0.6rem; letter-spacing: 0.1em; color: var(–paper); background: var(–accent); padding: 0.1rem 0.4rem; margin-left: 0.4rem; vertical-align: middle; position: relative; top: -1px; }
+
+/* Hybrid bar */
+.hybrid-bar { margin: 2rem 0; border: 1px solid var(–rule); overflow: hidden; }
+.hybrid-bar-header { background: var(–ink); color: var(–paper); font-family: ‘JetBrains Mono’, monospace; font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; padding: 0.6rem 1rem; }
+.hybrid-spectrum { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+.hybrid-step { padding: 1rem 1.1rem; border-right: 1px solid var(–rule); font-size: 0.88rem; }
+.hybrid-step:last-child { border-right: none; }
+.hybrid-step .hs-label { font-family: ‘JetBrains Mono’, monospace; font-size: 0.6rem; letter-spacing: 0.12em; color: var(–accent); text-transform: uppercase; margin-bottom: 0.3rem; }
+.hybrid-step p { color: var(–muted); font-size: 0.87rem; margin: 0; line-height: 1.5; }
+.hybrid-step.hs-danger { background: var(–highlight); }
+
+/* Mitigation tiers */
+.mitigation-tier { display: grid; grid-template-columns: auto 1fr; gap: 0 1.5rem; align-items: start; padding: 1.2rem 0; border-bottom: 1px solid var(–rule); }
+.mitigation-tier:last-child { border-bottom: none; }
+
+.tier-label { font-family: ‘JetBrains Mono’, monospace; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.3rem 0.6rem; white-space: nowrap; margin-top: 0.25rem; }
+.tier-high { background: var(–ink); color: var(–paper); }
+.tier-mid { background: var(–accent); color: var(–paper); }
+.tier-low { background: var(–paper-dark); color: var(–muted); border: 1px solid var(–rule); }
+
+.tier-content h4 { font-family: ‘Playfair Display’, serif; font-size: 1.05rem; font-weight: 700; margin-bottom: 0.3rem; }
+.tier-content p { font-size: 0.92rem; color: var(–muted); margin: 0; line-height: 1.6; }
+
+/* Warning / scope / economic boxes */
+.warning-box { background: var(–paper-dark); border: 1px solid var(–rule); border-top: 3px solid var(–accent); padding: 1.5rem 1.8rem; margin: 2rem 0; }
+.warning-box .warning-label { font-family: ‘JetBrains Mono’, monospace; font-size: 0.65rem; letter-spacing: 0.2em; color: var(–accent); text-transform: uppercase; margin-bottom: 0.6rem; }
+.warning-box p { font-size: 0.95rem; color: var(–muted); margin: 0 0 0.7rem; line-height: 1.65; }
+.warning-box p:last-child { margin-bottom: 0; }
+
+.scope-box { background: var(–paper-dark); border: 1px solid var(–rule); border-left: 3px solid var(–muted); padding: 1.2rem 1.6rem; margin: 2rem 0; }
+.scope-box .scope-label { font-family: ‘JetBrains Mono’, monospace; font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(–muted); margin-bottom: 0.5rem; }
+.scope-box p { font-size: 0.93rem; color: var(–muted); margin: 0; line-height: 1.65; }
+
+.econ-box { background: var(–highlight); border: 1px solid var(–accent-light); border-left: 4px solid var(–accent); padding: 1.2rem 1.6rem; margin: 2rem 0; }
+.econ-box .econ-label { font-family: ‘JetBrains Mono’, monospace; font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(–accent); margin-bottom: 0.5rem; }
+.econ-box p { font-size: 0.95rem; color: var(–ink); margin: 0; line-height: 1.65; }
+
+/* Footer */
+.doc-footer { margin-top: 4rem; padding: 2rem 0; border-top: 3px double var(–ink); text-align: center; }
+.doc-footer p { font-family: ‘JetBrains Mono’, monospace; font-size: 0.65rem; color: var(–muted); letter-spacing: 0.08em; line-height: 2.2; margin: 0; }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+.masthead { animation: fadeUp 0.5s ease both; }
+.lede { animation: fadeUp 0.5s 0.1s ease both; }
+
+@media (max-width: 640px) {
+body { font-size: 16px; }
+.container { padding: 0 1.2rem; }
+.lede { padding: 2rem 1.5rem; }
+.concept-pair { grid-template-columns: 1fr; }
+.case-analysis { grid-template-columns: 1fr; }
+.hybrid-spectrum { grid-template-columns: 1fr; }
+.hybrid-step { border-right: none; border-bottom: 1px solid var(–rule); }
+.toc ol { columns: 1; }
+.taxonomy { font-size: 0.8rem; }
+.taxonomy thead th, .taxonomy tbody td { padding: 0.6rem 0.6rem; }
+.byline-block { gap: 1rem; }
+.mitigation-tier { grid-template-columns: 1fr; gap: 0.5rem; }
+.decision-rule .dr-row { grid-template-columns: 1fr; }
+}
+</style>
+
+</head>
+<body>
+
+<div class="masthead">
+  <div class="container">
+    <div class="publication-line">
+      Solbakken Research Initiative &nbsp;·&nbsp; Working Paper
+      <span class="version-tag">V4 · APR 2026</span>
+    </div>
+    <h1 class="main-title">On <em>Slop</em></h1>
+    <p class="subtitle">A Field Guide for Journalists and Practitioners</p>
+    <div class="byline-block">
+      <span>N. Haaland</span>
+      <span>Working draft — not peer reviewed</span>
+      <span>Dialogue partner: Claude (Anthropic)</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="toc">
+    <div class="toc-title">Contents — Version 4</div>
+    <ol>
+      <li><span class="toc-num">I</span> Why the Existing Vocabulary Fails</li>
+      <li><span class="toc-num">II</span> The Definition</li>
+      <li><span class="toc-num">III</span> Slop vs. Epistemic Opacity</li>
+      <li><span class="toc-num">IV</span> The Spectrum: Three Zones</li>
+      <li><span class="toc-num">V</span> The Fourth Category</li>
+      <li><span class="toc-num">VI</span> Case Study: El Mencho</li>
+      <li><span class="toc-num">VII</span> A Practical Checklist</li>
+      <li><span class="toc-num">VIII</span> Hybrid Authorship</li>
+      <li><span class="toc-num">IX</span> The Arms Race Warning</li>
+      <li><span class="toc-num">X</span> What Actually Works</li>
+      <li><span class="toc-num">XI</span> The Honest Limit</li>
+    </ol>
+  </div>
+
+  <div class="lede">
+    <p>The vocabulary journalists have been given — misinformation, hallucination, deepfake, fake news — does not describe the most common thing they are actually encountering. Most problematic AI-generated content is not false. It is produced by a process in which no actor bore meaningful cost for being wrong. That structural absence of accountability, it turns out, is what needs naming — and what current vocabulary cannot name.</p>
+  </div>
+
+  <!-- I -->
+
+  <div class="section">
+    <div class="section-label">I</div>
+    <h2>Why the Existing Vocabulary Fails</h2>
+    <div class="field-note">The problem isn't bad content. It's a production process that was never accountable for whether the content was good.</div>
+
+```
+<p>When a model invents a citation that does not exist, that is a <strong>hallucination</strong> — the system was optimizing against a truth-proxy objective and failed. When a politician's words are deliberately altered in a video, that is <strong>misinformation</strong> — someone knew the truth and chose to contradict it. When a generated image produces six-fingered hands, that is a technical artifact, not a deception.</p>
+
+<p>None of these categories describe the bulk of what is now flooding newsrooms, social feeds, and search results. Most of it is grammatically correct, structurally plausible, locally coherent — and produced by a process in which no downstream mechanism enforced correction or penalized error. It satisfied the form of the genre it was imitating. Whether it referred to reality was simply not priced in.</p>
+
+<p>This is what practitioners have started calling <strong>slop</strong>. The term needs a cleaner definition — not to dismiss speculative or uncertain work, but to distinguish between disciplined uncertainty and unconstrained synthesis.</p>
+
+<p>Note on the current information economy: slop is cheap to produce and expensive to correct. That cost asymmetry is inverted relative to what a functioning epistemic ecosystem requires — and it is the root structural condition, not a side effect, of the problem this document addresses.</p>
+```
+
+  </div>
+
+  <!-- II -->
+
+  <div class="section">
+    <div class="section-label">II</div>
+    <h2>The Definition</h2>
+    <div class="field-note">Hallucinations misfire. Slop was never accountable for missing.</div>
+
+```
+<div class="definition-block">
+  <div class="def-label">Working Definition — V4</div>
+  <p>Slop is content produced by a process in which no actor bore meaningful cost for inaccuracy — optimized instead for satisfying the formal expectations of its genre. More precisely: slop arises when no operational feedback loop links accuracy to outcome for any participant in the production chain.</p>
+</div>
+
+<div class="revision-note">
+  <div class="rn-label">Revision note — V3 → V4</div>
+  The V3 definition ("no actor bore meaningful cost for inaccuracy") correctly shifted from inferred intention to observable accountability structure. V4 adds a technical grounding clause for readers familiar with optimization and control systems: slop arises when no downstream process enforces correction or penalizes error — when there is no operational feedback loop linking accuracy to outcome. This is not a claim about the model's "intention" (models do not have intentions) but about the system architecture surrounding its deployment. A hallucination arises within a system where accuracy was a training objective, even if imperfectly implemented. Slop arises when no such objective governs the deployment context.
+</div>
+
+<p>Meaningful cost takes concrete forms: editorial rejection, legal liability, reputational damage, loss of audience trust, professional consequence, or budgetary penalty. Content produced without any such cost in the chain is slop regardless of how accurate it happens to be — accuracy is accidental, not structural.</p>
+
+<div class="decision-rule">
+  <div class="dr-label">Decision Rule — For Use Under Deadline Pressure</div>
+  <div class="dr-row">
+    <div class="dr-if">If</div>
+    <div class="dr-then">You can identify a specific person or institution that would face editorial rejection, legal liability, reputational damage, or professional consequence for inaccuracy in this content —</div>
+  </div>
+  <div class="dr-row">
+    <div class="dr-if">Then</div>
+    <div class="dr-then">The content is not structural slop. Evaluate it on its own merits.</div>
+  </div>
+  <div class="dr-row">
+    <div class="dr-if">If</div>
+    <div class="dr-then">You cannot identify such a cost, or the accountability is nominal rather than meaningful —</div>
+  </div>
+  <div class="dr-row">
+    <div class="dr-if">Then</div>
+    <div class="dr-then">Treat the content as slop unless strong evidence shows otherwise. Do not give it the benefit of the doubt. That benefit of the doubt is the loophole slop exploits.</div>
+  </div>
+</div>
+
+<p>This distinguishes slop from its neighbors:</p>
+
+<table class="taxonomy">
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Relationship to truth</th>
+      <th>Accountability structure</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Lie</td>
+      <td>Knows truth, actively avoids it</td>
+      <td>Actor accountable — and chose deception</td>
+    </tr>
+    <tr>
+      <td>Error</td>
+      <td>Aims for truth, misses it</td>
+      <td>Actor accountable for the miss</td>
+    </tr>
+    <tr>
+      <td>Hallucination</td>
+      <td>Confabulates truth-shaped content</td>
+      <td>Model property; human accountability depends on deployment context</td>
+    </tr>
+    <tr>
+      <td>Noise</td>
+      <td>No relationship to truth</td>
+      <td>Random or broken output</td>
+    </tr>
+    <tr class="slop-row">
+      <td>Slop</td>
+      <td>Accuracy was never priced in</td>
+      <td>No actor bore meaningful cost for being wrong</td>
+    </tr>
+    <tr class="new-row">
+      <td>Contextual Deception</td>
+      <td>True content, false deployment</td>
+      <td>See Section V — distinct mechanism</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The hallucination row requires particular attention. A model fabricating a citation is not itself accountable — but the journalist who publishes without checking may be. Hallucination is a model property. Whether the resulting published content is slop depends entirely on whether any human in the chain bore cost for the error. This means the same model output can be slop in one deployment context and not slop in another — the difference is the accountability structure surrounding it, not the output itself.</p>
+```
+
+  </div>
+
+  <!-- III -->
+
+  <div class="section">
+    <div class="section-label">III</div>
+    <h2>Slop vs. Epistemic Opacity</h2>
+    <div class="field-note">Opacity is a condition imposed from outside. Slop is a condition built in from the start.</div>
+
+```
+<p>Not all content that resists verification is slop. Some content cannot be verified not because accountability was absent from its production, but because the production process is <em>obscured</em> — by corporate secrecy, proprietary models, missing metadata, or complexity that exceeds available investigative resources.</p>
+
+<div class="concept-pair">
+  <div class="concept-card primary">
+    <div class="card-label">Slop</div>
+    <p>No feedback loop links accuracy to outcome for any actor in the production chain. Even with full transparency about how it was made, the content would remain epistemically hollow — the accountability was never there to begin with. Disclosure cannot fix it.</p>
+  </div>
+  <div class="concept-card secondary">
+    <div class="card-label">Epistemic Opacity</div>
+    <p>Accountability could exist but is practically inaccessible — hidden by proprietary systems, missing provenance chains, or undisclosed methodology. Opacity is not slop per se, but it creates conditions in which slop is hard to detect and easy to sustain. Disclosure could fix it.</p>
+  </div>
+</div>
+
+<p>The practical distinction: a journalist encountering opacity has remedies — disclosure requirements, independent audits, regulatory access, FOIA requests. A journalist encountering slop has no equivalent remedy, because there is no underlying accountable process to disclose. Demanding transparency from a slop producer reveals only that there was nothing to be transparent about.</p>
+
+<p>Opacity and slop frequently co-occur and reinforce each other. When production processes are hidden, the absence of accountability is harder to detect. But they are distinct problems requiring distinct responses, and conflating them produces ineffective remediation.</p>
+```
+
+  </div>
+
+  <!-- IV -->
+
+  <div class="section">
+    <div class="section-label">IV</div>
+    <h2>The Spectrum: Three Zones</h2>
+    <div class="field-note">Unfalsified is not the same as unfalsifiable. Unverified is not the same as unaccountable.</div>
+
+```
+<p>Slop is not binary. A more useful model distinguishes three zones, defined by the accountability structure of the production process — not by content quality, surface appearance, or the author's sincerity.</p>
+
+<div class="zone-grid">
+  <div class="zone zone-1">
+    <div class="zone-number">1</div>
+    <div class="zone-title">Zone One</div>
+    <h4>Structural Slop</h4>
+    <p>The production process is designed so that no actor bears cost for inaccuracy — regardless of available time, resources, or expertise. Engagement-optimized content farms. Documents built to survive any outcome. Content where the absence of accountability is load-bearing: it serves its purpose precisely because it cannot be held to account.</p>
+    <p class="phase-note">Cannot be revised into non-slop. The only remedies are replacement and structural change upstream. No amount of additional time or resources changes the accountability architecture — because the architecture was designed to exclude accountability.</p>
+  </div>
+  <div class="zone zone-2">
+    <div class="zone-number">2</div>
+    <div class="zone-title">Zone Two</div>
+    <h4>Incidental Slop</h4>
+    <p>Content produced under conditions where accountability existed in principle but was not exercised — due to time pressure, resource constraints, or genre convention. The diagnostic test: would the same actor, given adequate time and resources, with their name attached and professional consequences in play, produce substantively different content? If yes: incidental slop. If no — if the same output would emerge regardless — the slop is structural.</p>
+    <p class="phase-note">Phase transition to Zone 1: incidental slop becomes structural when the production environment is systematically designed to prevent the addition of rigor — not merely failing to incentivize it, but actively excluding it. A deadline-pressed journalist is Zone 2. A content farm optimized for volume regardless of accuracy is Zone 1, even if individual employees believe they are doing their best.</p>
+  </div>
+  <div class="zone zone-3">
+    <div class="zone-number">3</div>
+    <div class="zone-title">Zone Three</div>
+    <h4>Legitimate Uncertainty</h4>
+    <p>Speculative, preliminary, or exploratory work that looks uncertain but differs in one critical way: the author can articulate what would prove them wrong, and being wrong would matter to them professionally or intellectually. Uncertainty is not slop. Unaccountability is.</p>
+    <p class="phase-note">A researcher at the frontier of an unsettled field, a reporter accurately conveying that a study is preliminary, a working paper that names its own limits — all Zone 3. The signal is skin in the game, not certainty of conclusion.</p>
+  </div>
+</div>
+
+<p>Mixed cases: some content will sit between zones, where accountability is partial — some actors in the chain bore cost, others did not. Treat these as Zone 2 at minimum, and investigate which parts of the chain lacked accountability rather than treating the whole as either cleared or condemned.</p>
+```
+
+  </div>
+
+  <!-- V -->
+
+  <div class="section">
+    <div class="section-label">V</div>
+    <h2>The Fourth Category: Contextual Deception</h2>
+    <div class="field-note">True content deployed falsely produces identical epistemic damage to slop — but requires entirely different detection and remediation.</div>
+
+```
+<p>The slop definition covers content produced without accountability for accuracy. It does not cover a growing and practically important category: <em>real content, accurately produced, deployed in a false context.</em> This is not a minor boundary case — it is a distinct problem that a complete practitioner framework must address separately.</p>
+
+<div class="fourth-category">
+  <div class="fc-label">Contextual Deception — Working Definition</div>
+  <h4>True content, false deployment</h4>
+  <p>Footage, images, or text that accurately depicts real events, presented in a context implying something other than what it actually shows. The original production may have been entirely accountable. The deception lies in the framing, caption, timestamp, or platform context of circulation — not in the content itself.</p>
+  <p><strong>Why it matters for this framework:</strong> Contextual deception cannot be detected by the slop checklist alone. The content may pass all nine questions when evaluated in isolation. Detection requires contextual verification: reverse image search, metadata timestamps, geolocation cross-referencing, and comparison with known records of events at the claimed time and place. These are different skills from evaluating epistemic accountability in a text.</p>
+  <p>Similar dynamics appear across domains: disaster imagery repurposed from earlier events, conflict footage misattributed to different theaters, financial rumor cascades using real data from unrelated contexts. The El Mencho case study below illustrates both slop and contextual deception occurring simultaneously — which is the more common real-world pattern.</p>
+</div>
+
+<p>Slop is addressed by accountability structures in production. Contextual deception is addressed by provenance verification at the point of consumption. A complete practitioner framework needs both — and must not assume that clearing a piece for slop also clears it for contextual deception.</p>
+```
+
+  </div>
+
+  <!-- VI -->
+
+  <div class="section">
+    <div class="section-label">VI</div>
+    <h2>Case Study: The El Mencho Images</h2>
+    <div class="field-note">A single event producing structural slop and contextual deception simultaneously — nearly indistinguishable in real time.</div>
+
+```
+<div class="case-study">
+  <h3>Mexico, February 22, 2026</h3>
+  <span class="case-date">CJNG Retaliation · Puerto Vallarta &amp; Guadalajara · Fabricated and repurposed images circulated simultaneously</span>
+
+  <p>On February 22, 2026, Mexican special forces killed Nemesio "El Mencho" Oseguera Cervantes, leader of the Jalisco New Generation Cartel. Real retaliatory violence erupted across 20 Mexican states within hours. Into this genuine crisis, a coordinated campaign inserted two distinct types of false content simultaneously — illustrating the difference between slop and contextual deception under live conditions.</p>
+
+  <p><strong>The AI-generated images</strong> — a panoramic view of Puerto Vallarta with multiple buildings including the iconic Our Lady of Guadalupe Church engulfed in flames, and a passenger airliner burning on the tarmac at Guadalajara Airport — were structural slop. Produced by a process with no accountability for accuracy, optimized for fear amplification and scroll-speed plausibility. The Gemini watermark was present in some versions and cropped in others. Both images were credible precisely because real violence was occurring — credibility borrowed from a genuine event.</p>
+
+  <p><strong>The Nepal video</strong> — real footage of vehicles burning during youth protests in Kathmandu in September 2025, circulated with captions implying it showed Mexican cartel retaliation — was contextual deception. The footage was accurately captured. The production was accountable. The deception was entirely in the deployment context.</p>
+
+  <p class="case-hedging">Note on sourcing: the timeline and attribution of specific images to specific actors remain partially contested across sources. The structural analysis below focuses on properties of the content and its dissemination that are well-documented across multiple independent fact-checking organizations, rather than on contested details of origin or intent.</p>
+
+  <div class="case-detail">
+    <div class="case-detail-label">Framework Analysis</div>
+    <div class="case-analysis">
+      <div class="analysis-item">
+        <div class="ai-label">Zone classification (images)</div>
+        <p>Zone 1 — Structural Slop. No actor in the production chain bore cost for accuracy. The absence of accountability was the production condition. Designed to outpace scrutiny rather than survive it.</p>
+      </div>
+      <div class="analysis-item">
+        <div class="ai-label">Nepal video classification</div>
+        <p>Contextual Deception — not slop. Real footage, accountable production, false deployment. Required different detection: timestamp verification, geolocation, and cross-referencing with known events — not epistemic accountability assessment.</p>
+      </div>
+      <div class="analysis-item">
+        <div class="ai-label">Opacity vs. slop</div>
+        <p>The Gemini watermark was technically present — provenance was traceable. Opacity was imposed functionally by watermark removal and speed of spread, not by absent accountability in production.</p>
+      </div>
+      <div class="analysis-item">
+        <div class="ai-label">Why detection was hard</div>
+        <p>The CJNG's documented history of spectacular violence — helicopter shootdowns, brazen urban attacks — made fabrications plausible. Credibility was borrowed from real history. A context problem, not a visual artifact problem.</p>
+      </div>
+      <div class="analysis-item">
+        <div class="ai-label">Proximity heuristic</div>
+        <p>Images circulated fastest in closed, self-reinforcing networks with no adversarial pressure. No actor in the initial distribution network had an incentive to flag errors — the network was structured to exclude that cost.</p>
+      </div>
+      <div class="analysis-item">
+        <div class="ai-label">Mitigation limit</div>
+        <p>Fact-checker analyses arrived after the images had shaped international perception — including travel advisories and airline routing decisions. Detection at publication speed is insufficient when distribution outpaces correction by hours.</p>
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+  </div>
+
+  <!-- VII -->
+
+  <div class="section">
+    <div class="section-label">VII</div>
+    <h2>A Practical Checklist</h2>
+    <div class="field-note">Useful tools against incidental slop. Insufficient alone against structural slop engineered to pass them.</div>
+
+```
+<p>These questions are a field heuristic, not a scientific instrument. Apply the decision rule in Section II first. Use the checklist to investigate, not to clear. A passing score is a starting point for scrutiny, not a conclusion.</p>
+
+<ul class="checklist">
+  <li>
+    <div class="check-num">01</div>
+    <div class="check-content">
+      <strong>Does it specify what would prove it wrong?</strong>
+      A primary indicator — but not sufficient alone. Falsifiability statements are cheap to generate and easy to make vacuous. Evaluate whether the stated conditions are specific, testable, and would actually cost the producer something if triggered. A claim that states failure conditions so broadly they can never be triggered is performing falsifiability, not practicing it.
+    </div>
+  </li>
+  <li>
+    <div class="check-num">02</div>
+    <div class="check-content">
+      <strong>Do the numbers trace back to anything?</strong>
+      Slop uses numbers decoratively. Precise figures with no named source, undefined baselines, or proprietary methodology are performing precision rather than delivering it. Follow the number to its origin — if the chain breaks, the number is furniture.
+    </div>
+  </li>
+  <li>
+    <div class="check-num">03</div>
+    <div class="check-content">
+      <strong>Does the confidence outrun the evidence?</strong>
+      Compare the certainty of the language to the strength of what is actually cited. Categorical conclusions from pilot studies. Revolutionary findings from a single unpublished result. Note: uncertain language does not guarantee rigor — confidence and accuracy are independent variables.
+    </div>
+  </li>
+  <li>
+    <div class="check-num">04</div>
+    <div class="check-content">
+      <strong>Are fact and speculation clearly labeled?</strong>
+      Slop collapses these categories. A sentence that moves from established finding to contested hypothesis to speculation without signposting is structurally unreliable regardless of whether any individual claim is true.
+    </div>
+  </li>
+  <li>
+    <div class="check-num">05</div>
+    <div class="check-content">
+      <strong>Would you know what to check next?</strong>
+      Strong work points toward verification. It names datasets, cites competing findings, specifies conditions under which results hold. If a piece leaves no practical path to follow-up, it is optimized for closure rather than inquiry.
+    </div>
+  </li>
+  <li>
+    <div class="check-num">06</div>
+    <div class="check-content">
+      <strong>Does it know what it doesn't know?</strong>
+      <span class="check-note">V4+</span>
+      Slop expands to fill available narrative space. The inability to say "unknown," "not measured," or "outside scope" is a reliable indicator of structural indifference. Content that has no acknowledged limits was not produced by a process that cared about having limits.
+    </div>
+  </li>
+  <li>
+    <div class="check-num">07</div>
+    <div class="check-content">
+      <strong>Is the provenance traceable?</strong>
+      Who produced it, when, on what basis, with what review? Note: traceable provenance addresses opacity, not necessarily slop. Content can have clear provenance and still be produced without any accountability for accuracy.
+    </div>
+  </li>
+  <li>
+    <div class="check-num">08</div>
+    <div class="check-content">
+      <strong>Is it embedded in a truth-seeking network?</strong>
+      <span class="check-note">V2+</span>
+      Reliable content appears in ecosystems where contradiction is possible — citations, peer review, adversarial commentary, editorial accountability. Ask: if this content were wrong, would anyone in the network where it originated have had an incentive to say so?
+    </div>
+  </li>
+  <li>
+    <div class="check-num">09</div>
+    <div class="check-content">
+      <strong>For images and video: does the context match the content?</strong>
+      <span class="check-note">V3+</span>
+      This addresses contextual deception, not slop. Verify timestamp, location, and stated context independently. Reverse image search. A "yes" to all previous questions does not clear content that is real but misdeployed.
+    </div>
+  </li>
+</ul>
+```
+
+  </div>
+
+  <!-- VIII -->
+
+  <div class="section">
+    <div class="section-label">VIII</div>
+    <h2>Hybrid Authorship</h2>
+    <div class="field-note">Hybrid authorship is not a classification problem. It is an accountability distribution problem.</div>
+
+```
+<p>The binary of "human-written" versus "AI-generated" is already obsolete as a practical category. Most content now exists on a spectrum of human-AI collaboration. The accountability distribution across that spectrum is what matters — not the presence or absence of human involvement per se.</p>
+
+<div class="hybrid-bar">
+  <div class="hybrid-bar-header">Hybrid Authorship Accountability Spectrum</div>
+  <div class="hybrid-spectrum">
+    <div class="hybrid-step">
+      <div class="hs-label">Full Accountability</div>
+      <p>AI as drafting tool, human edits and owns every claim. Being wrong has professional cost. The feedback loop linking accuracy to outcome is intact.</p>
+    </div>
+    <div class="hybrid-step hs-danger">
+      <div class="hs-label">Nominal Oversight ⚠</div>
+      <p>Human nominally in the loop but functionally absent — reviewing at speed, signing off without checking. The feedback loop exists on paper but not in practice. Slop conditions present.</p>
+    </div>
+    <div class="hybrid-step">
+      <div class="hs-label">Automated Production</div>
+      <p>No meaningful human review. The feedback loop linking accuracy to outcome is absent entirely. Structural slop conditions fully present regardless of output quality.</p>
+    </div>
+  </div>
+</div>
+
+<p>The middle column is where much current newsroom AI use sits, and where the accountability distribution framework does its most important work. Nominal presence without meaningful cost for error is the production condition for incidental slop at minimum — and structural slop wherever the nominal oversight becomes systematic rather than situational.</p>
+
+<p>The invariant question applies unchanged across all three columns: where in this chain does a feedback loop exist that links accuracy to outcome for any specific actor? If you can locate it, evaluate the content on its merits. If you cannot, apply the decision rule from Section II.</p>
+```
+
+  </div>
+
+  <!-- IX -->
+
+  <div class="section">
+    <div class="section-label">IX</div>
+    <h2>The Arms Race Warning</h2>
+
+```
+<div class="warning-box">
+  <div class="warning-label">Critical Limitation — Already Observable</div>
+  <p>Every detection heuristic in this document can be learned and mimicked. Generative systems trained on rigorous-looking corpora will internalize the surface grammar of falsifiability — limitations sections, conditional phrasing, acknowledged uncertainty — without inheriting the underlying accountability structures those features are meant to signal.</p>
+  <p>This is already observable in sophisticated marketing copy, bureaucratic documents, and AI-generated research summaries that include limitations sections written to satisfy reviewers rather than to honestly constrain claims. The checklist above will degrade as a detection tool precisely as the systems generating slop learn to produce its markers without the substance.</p>
+</div>
+
+<p>This is not an argument against using the checklist. For individual practitioners evaluating specific content, these questions remain useful — particularly for incidental slop and for structural slop that has not yet learned to perform rigor. The problem is at scale: detection systems built on pattern-matching will degrade as the patterns are learned.</p>
+
+<p>The implication is that what is needed alongside detection is <strong>structural traceability</strong> — verifiable process signatures recording what choices were made, by whom, before results were known. The specific technology matters less than the principle: accountability must be embedded in the production process, not inferred from the output. Output that has learned to look accountable is not the same as a process that was.</p>
+```
+
+  </div>
+
+  <!-- X -->
+
+  <div class="section">
+    <div class="section-label">X</div>
+    <h2>What Actually Works: A Mitigation Hierarchy</h2>
+
+```
+<div class="econ-box">
+  <div class="econ-label">Economic Framing</div>
+  <p>All robust mitigations function by reintroducing cost asymmetry: making error more expensive than production. The current information economy has this inverted — producing slop is cheap and fast; detecting and correcting it is expensive and slow. Every strategy below is, at its core, an attempt to correct that inversion within a specific domain.</p>
+</div>
+
+<div class="scope-box">
+  <div class="scope-label">Scope Limitation</div>
+  <p>The strategies below assume institutions with capacity to impose and enforce accountability. In decentralized social media, authoritarian information spaces, and hyperlocal news deserts — the contexts where slop is often most damaging — those institutions are absent or compromised. This hierarchy works for peer-reviewed science and legacy journalism. It does substantially less for the environments where slop actually thrives. That is a real limit of the framework, not a rounding error.</p>
+</div>
+
+<div class="mitigation-tier">
+  <div class="tier-label tier-high">Most Robust</div>
+  <div class="tier-content">
+    <h4>Institutional Cost Structures</h4>
+    <p>Pre-registration before data collection. Adversarial review that specifically hunts accountability gaps. Replication requirements before amplification. These work because cost is imposed on the <em>process</em>, not inferred from output. Any feedback loop making error professionally, reputationally, or financially expensive creates selection pressure against slop — regardless of what vocabulary slop has learned to use. Requires functioning institutions with teeth and willingness to use them.</p>
+  </div>
+</div>
+
+<div class="mitigation-tier">
+  <div class="tier-label tier-mid">Moderately Robust</div>
+  <div class="tier-content">
+    <h4>Provenance and Structural Traceability</h4>
+    <p>Full process accountability: who reviewed it, what constraints were imposed, what would have caused rejection. Harder to mimic than vocabulary because it requires actually having a process, not just describing one. For images and video, includes metadata preservation and deployment context verification — addressing contextual deception as well as slop.</p>
+  </div>
+</div>
+
+<div class="mitigation-tier">
+  <div class="tier-label tier-low">Useful, Gameable at Scale</div>
+  <div class="tier-content">
+    <h4>Falsifiability Checklists</h4>
+    <p>The nine questions in Section VII. Useful against incidental slop and structural slop that has not yet learned to perform rigor. Treat a passing score as a starting point for scrutiny, not a conclusion. Will degrade as systems learn to produce rigor markers without accountability substance.</p>
+  </div>
+</div>
+
+<div class="mitigation-tier">
+  <div class="tier-label tier-low">Insufficient Alone</div>
+  <div class="tier-content">
+    <h4>Quality Signals</h4>
+    <p>Grammar, structure, citation count, confident tone, equation density, professional formatting. Never reliable indicators of accountability and now actively misleading. Treat as noise — or as the first thing a well-engineered slop system will optimize for, because they are cheap to produce and expensive to scrutinize.</p>
+  </div>
+</div>
+```
+
+  </div>
+
+  <!-- XI -->
+
+  <div class="section">
+    <div class="section-label">XI</div>
+    <h2>The Honest Limit of This Document</h2>
+
+```
+<p>This framework is preliminary. The definition has not been formally adversarially reviewed. The zone spectrum is a working model, not a validated taxonomy. The checklist is a field heuristic, not a scientific instrument. The case study is one well-documented instance, not a controlled analysis. The mitigation hierarchy works best in institutional environments that do not exist in many contexts where slop is most damaging.</p>
+
+<p>The most important open problem: the definition is a claim about accountability structure, which — like all claims about process — is not directly observable from output alone. Determining whether anyone bore meaningful cost for inaccuracy requires knowing something about the production process, incentives, and institutional context. That knowledge is frequently unavailable to the practitioner evaluating content in real time.</p>
+
+<p>The decision rule in Section II is an attempt to resolve this practically: when you cannot determine the accountability structure, assume it is absent. That is not a perfect heuristic. It will produce false positives — content flagged as slop that was actually produced with genuine accountability. But in the current information environment, where slop is cheap and abundant and designed to exploit the benefit of the doubt, erring toward skepticism is the correct asymmetric response.</p>
+
+<p>What this document attempts is to give practitioners better vocabulary and more targeted questions than the existing literature currently offers — while being explicit about what it cannot do. A framework that claims more certainty than it has earned is, by its own definition, not far from the thing it is trying to describe.</p>
+
+<div class="definition-block">
+  <div class="def-label">The Invariant Question</div>
+  <p>Was anyone in the production chain in a position where being wrong would have cost them something real? If you cannot identify where that accountability resides, assume it does not exist.</p>
+</div>
+
+<p>If yes, and you can name it: not structural slop. Evaluate on merits. If no, or unidentifiable: proceed with significant caution regardless of how rigorous it looks, how confident it sounds, how many citations it carries, or whether it includes a limitations section written to satisfy a checklist rather than to honestly constrain its claims.</p>
+
+<p>That question cannot be automated. In an environment where accountability structures are increasingly obscured — by opacity, by speed, by hybrid authorship, by content engineered to look accountable while being none — it is also increasingly hard to answer. It remains the right question to ask. And the correct default, when the answer is unclear, is doubt.</p>
+```
+
+  </div>
+
+  <div class="doc-footer">
+    <p>
+      Solbakken Research Initiative &nbsp;·&nbsp; N. Haaland &nbsp;·&nbsp; April 2026<br>
+      Working paper — Version 4 — Not peer reviewed<br>
+      Developed in dialogue with Claude (Anthropic)<br>
+      Critiques incorporated: DeepSeek · Perplexity · GPT · Gemini<br>
+      Adversarial feedback welcome
+    </p>
+  </div>
+
+</div>
+</body>
+</html>
